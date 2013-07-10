@@ -1,13 +1,17 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
+eagle.epf
+DESCRIPTION
+DRILEGEND.CFG
+*.pro
+*.b#?
+*.s#?
+*.zip
+*.dri
+*.gpi
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+*.drd
+*.gbl
+*.gbo
+*.gbs
+*.gtl
+*.gto
+*.gts

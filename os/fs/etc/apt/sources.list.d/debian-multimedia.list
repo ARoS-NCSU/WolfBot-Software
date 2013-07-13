@@ -1,0 +1,3 @@
+deb-src http://www.deb-multimedia.org sid main
+deb http://www.deb-multimedia.org wheezy main non-free
+

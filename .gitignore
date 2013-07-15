@@ -18,3 +18,5 @@ DRILEGEND.CFG
 *.bor
 *.gtp
 *.GTP
+
+*.pyc

@@ -10,7 +10,7 @@ else
   chmod 755 install-me.sh
   ./install-me.sh
   rm -f install-me.sh
-  if [ $1 == `-r` ] ; then
+  if [ "$1"x == "-r"x ] ; then
     reboot
   fi
 fi

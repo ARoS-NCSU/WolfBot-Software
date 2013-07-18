@@ -4,14 +4,20 @@
 route add default gw 192.168.7.1
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
-#apt-get update
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get -y install salt-minion
 apt-get -y install locales
 dpkg-reconfigure -f noninteractive locales 
 
-apt-get -y install deb-multimedia-keyring
-apt-get -y install ntp
-#apt-get -y install bind9-host
+apt-get -y -o Dpkg::Options::="--force-confold" install ntp
+apt-get -y --force-yes install deb-multimedia-keyring
+apt-get update
+apt-get -y -o Dpkg::Options::="--force-confold" install ffmpeg
+
+apt-get -y install bind9-host
 apt-get -y install vim
+apt-get -y install ipython
 
 # wolfbot code dependencies
 apt-get -y install python-yaml

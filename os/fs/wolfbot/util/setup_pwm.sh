@@ -53,7 +53,7 @@ load_slot am33xx_pwm
 # servo on ecap0
 load_pwm 2
 set_period 2 10000000
-set_duty   2  2000000   # 135 degrees
+set_duty   2  1924925   # 135 degrees
 #set_duty   2  2400000
 set_polarity 2 0
 run_pwm 2

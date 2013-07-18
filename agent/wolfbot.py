@@ -32,13 +32,13 @@ class wolfbot(object):
         config['config'] = f.name
     else:
       try:
-        with open('config/wolfbot.cfg', 'r') as f:
+        with open('/wolfbot/config/wolfbot.cfg', 'r') as f:
           config = yaml.load(f)
           config['config'] = f.name
       except IOError:
         config = {}
       try:
-        with open('config/' + self.hostname + '.cfg', 'r') as f:
+        with open('/wolfbot/config/' + self.hostname + '.cfg', 'r') as f:
           config.update(yaml.load(f))
           config['config'] = f.name
       except IOError:

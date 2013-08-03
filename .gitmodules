@@ -1,0 +1,3 @@
+[submodule "agent/pybbb"]
+	path = agent/pybbb
+	url = git@github.com:jschornick/pybbb.git

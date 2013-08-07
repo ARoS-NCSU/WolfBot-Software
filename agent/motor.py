@@ -1,5 +1,5 @@
-import pwm
-import gpio
+import bbb.pwm as pwm
+import bbb.gpio as gpio
 
 # pwm, dir
 motor_cfg = { 1: (4, 31), 

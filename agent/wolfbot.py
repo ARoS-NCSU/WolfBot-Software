@@ -1,8 +1,10 @@
+import sys
+sys.path.append('pybbb')
 import logging
 import yaml
 from math import sin, radians
 import motor
-import gpio
+import bbb.gpio as gpio
 from socket import gethostname
 
 class wolfbot(object):

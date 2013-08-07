@@ -11,13 +11,13 @@
 
 case "$1" in
 start|reload|force-reload|restart)
-        /wolfbot/util/setup_all.sh
+        /wolfbot/setup/setup_all.sh
         ;;
 stop)
         exit 0
         ;;
 *)
-        echo "Usage: /etc/init.d/boot_scripts.sh {start|stop|reload|restart|force-reload}"
+        echo "Usage: /etc/init.d/wolfbot {start|stop}"
         exit 1
         ;;
 esac

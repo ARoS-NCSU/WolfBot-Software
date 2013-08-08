@@ -1,0 +1,23 @@
+# From Table 17 "Register Address Map" of the LSM303DLHC data sheet
+
+# Mag address 0011110x
+
+register, type, hex, binary, default
+CRA_REG_M, rw, 00, 00000000, 0001000
+CRB_REG_M, rw, 01, 00000001, 0010000
+MR_REG_M, rw, 02, 00000010, 00000011
+OUT_X_H_M, r, 03, 00000011, output
+OUT_X_L_M, r, 04, 00000100, output
+OUT_Z_H_M, r, 05, 00000101, output
+OUT_Z_L_M, r, 06, 00000110, output
+OUT_Y_H_M, r, 07, 00000111, output
+OUT_Y_L_M, r, 08, 00001000, output
+SR_REG_Mg, r, 09, 00001001, 00000000
+IRA_REG_M, r, 0A, 00001010, 01001000
+IRB_REG_M, r, 0B, 00001011, 00110100
+IRC_REG_M, r, 0C, 00001100, 00110011
+# Reserved, 0D-30
+TEMP_OUT_H_M, 31, 00000000, output
+TEMP_OUT_L_M, 32, 00000000, output
+# Reserved, 33-3A
+ 

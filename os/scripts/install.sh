@@ -20,7 +20,7 @@ apt-get -y install vim
 apt-get -y install ipython
 
 # wolfbot code dependencies
-apt-get -y install python-yaml
+apt-get -y install python-yaml python-smbus
 
 # use the timezone we set in /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata

@@ -3,7 +3,7 @@ sys.path.append('pybbb')
 import logging
 import yaml
 from math import sin, radians
-import motor
+import motor, lsm
 import bbb.gpio as gpio
 from socket import gethostname
 
@@ -21,6 +21,9 @@ class wolfbot(object):
     for i in [1,2,3]:
       self.motors[i] = motor.motor(i)
     self.motor_enable = gpio.gpio(117)
+
+    self.accel = lsm.accel()
+    self.mag = lsm.mag()
 
     self.log.debug("Initization complete")
 

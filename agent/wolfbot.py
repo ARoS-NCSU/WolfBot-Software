@@ -3,7 +3,7 @@ sys.path.append('pybbb')
 import logging
 import yaml
 from math import sin, radians
-import motor, lsm
+import motor, lsm, dms
 import bbb.gpio as gpio
 from socket import gethostname
 
@@ -24,6 +24,10 @@ class wolfbot(object):
 
     self.accel = lsm.accel()
     self.mag = lsm.mag()
+
+    self.dms = []
+    for dms_cfg in self.config['dms']:
+      self.dms.append( dms.dms(dms_cfg) )
 
     self.log.debug("Initization complete")
 

@@ -1,5 +1,5 @@
 import csv
-from adafruit.Adafruit_I2C import Adafruit_I2C
+from i2c.Adafruit_I2C import Adafruit_I2C
 
 csv.register_dialect('nospace', skipinitialspace=True)
 

@@ -6,7 +6,7 @@ auto lo
 iface lo inet loopback
 
 # The primary network interface
-auto eth0
+#auto eth0
 iface eth0 inet dhcp
 # Example to keep MAC address between reboots
 #hwaddress ether DE:AD:BE:EF:CA:FE
@@ -21,20 +21,6 @@ iface wlan0 inet dhcp
 #    wireless-mode managed
 #    wpa-ssid "WolfBot"
 #    wpa-psk  "password"
-
-# sometimes the interface comes up as wlan1 ?!
-allow-hotplug wlan1
-auto wlan1
-iface wlan1 inet dhcp
-    wpa-driver wext
-    wpa-conf /etc/wpa_supplicant.conf
-
-# sometimes the interface comes up as wlan1 ?!
-allow-hotplug wlan2
-auto wlan2
-iface wlan2 inet dhcp
-    wpa-driver wext
-    wpa-conf /etc/wpa_supplicant.conf
 
 # Ethernet/RNDIS gadget (g_ether)
 # ... or on host side, usbnet and random hwaddr

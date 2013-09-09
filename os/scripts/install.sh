@@ -4,9 +4,14 @@
 route add default gw 192.168.7.1
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
-export DEBIAN_FRONTEND=noninteractive
+# install salt-minion to bootstrap configuration management
+wget -q -O- "http://debian.saltstack.com/debian-salt-team-joehealy.gpg.key" | apt-key add -
 apt-get update
 apt-get -y install salt-minion
+
+# everything below here should be converted to salt states
+
+export DEBIAN_FRONTEND=noninteractive
 apt-get -y install locales
 dpkg-reconfigure -f noninteractive locales 
 

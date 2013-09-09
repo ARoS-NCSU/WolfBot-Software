@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER=3.8.13-bone22
+VER=3.8.13-bone26
 
 if [ $VER == `uname -r` ] ; then
   echo Kernel already upgraded

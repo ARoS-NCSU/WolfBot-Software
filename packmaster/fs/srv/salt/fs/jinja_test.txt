@@ -1,4 +1,0 @@
-The UUID is: {{ uuid }}
-Foo
-Bar
-

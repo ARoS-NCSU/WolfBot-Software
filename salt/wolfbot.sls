@@ -15,7 +15,7 @@ ntp:
             - file: /etc/ntp.conf
     file.managed:
         - name: /etc/ntp.conf
-        - source: salt://fs/etc/ntp.conf
+        - source: salt://files/etc/ntp.conf
         - user: root
         - group: root
         - mode: 644
@@ -59,11 +59,11 @@ ffmpeg:
         - installed
     file.managed:
         - name: /etc/ffserver.conf
-        - source: salt://fs/etc/ffserver.conf
+        - source: salt://files/etc/ffserver.conf
 
 /boot/uboot/uEnv.txt:
     file.managed:
-        - source: salt://fs/boot/uboot/uEnv.txt
+        - source: salt://files/boot/uboot/uEnv.txt
         - template: jinja
         - context: 
             uuid: {{ grains['fs_uuid']['rootfs'] }}
@@ -74,7 +74,7 @@ ffmpeg:
 edimax_driver:
     file.managed:
         - name: /lib/modules/3.8.13-bone26/8192cu.ko
-        - source: salt://fs/lib/modules/3.8.13-bone26/8192cu.ko
+        - source: salt://files/lib/modules/3.8.13-bone26/8192cu.ko
     cmd.wait:
         - name: depmod -a
         - watch: 
@@ -82,11 +82,11 @@ edimax_driver:
 
 /etc/modprobe.d/8192cu.conf:
     file.managed:
-        - source: salt://fs/etc/modprobe.d/8192cu.conf
+        - source: salt://files/etc/modprobe.d/8192cu.conf
 
 /etc/modprobe.d/wifi_blacklist.conf:
     file.managed:
-        - source: salt://fs/etc/modprobe.d/wifi_blacklist.conf
+        - source: salt://files/etc/modprobe.d/wifi_blacklist.conf
 
 /etc/modules:
     file.append:
@@ -97,11 +97,11 @@ edimax_driver:
 # networking
 /etc/network/interfaces:
     file.managed:
-        - source: salt://fs/etc/network/interfaces
+        - source: salt://files/etc/network/interfaces
 
 /etc/wpa_supplicant.conf:
     file.managed:
-        - source: salt://fs/etc/wpa_supplicant.conf
+        - source: salt://files/etc/wpa_supplicant.conf
     
 # /etc/dhcp
 

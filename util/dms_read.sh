@@ -13,7 +13,7 @@ for i in "0 0 0" "0 0 1" "0 1 0" "0 1 1" "1 0 0" "1 0 1"; do
     echo $a > $A
     echo $b > $B
     echo $c > $C
-    cat /sys/devices/ocp.*/helper.*/AIN4
+    cat /sys/devices/ocp.*/helper.*/AIN2
 done
 
 

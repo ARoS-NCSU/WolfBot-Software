@@ -25,9 +25,12 @@ class wolfbot(object):
     self.accel = lsm.accel()
     self.mag = lsm.mag()
 
-    self.dms = []
-    for dms_cfg in self.config['dms']:
-      self.dms.append( dms.dms(dms_cfg) )
+    #self.dms = []
+    #for dms_cfg in self.config['dms']:
+    #  self.dms.append( dms.dms(dms_cfg) )
+
+    self.dms_mux = dms.DmsMux(self.config['dms_mux'])
+    self.dms = self.dms_mux.sensors
 
     self.log.debug("Initization complete")
 

@@ -1,0 +1,4 @@
+depmod -a on first boot
+
+install salt packages (and deps)
+  - from packmaster (via ssh) or on boot?

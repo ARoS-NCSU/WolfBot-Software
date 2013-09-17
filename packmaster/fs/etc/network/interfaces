@@ -15,6 +15,12 @@ iface wlan0 inet static
     address 10.1.2.1
     netmask 255.255.255.0
 
+auto wlan1
+iface wlan1 inet dhcp
+    wireless-essid ncsu
+    #wpa-driver wext
+    #wpa-conf /etc/wpa_supplicant.conf
+
 # Ethernet over USB
 iface usb0 inet static
     address 192.168.7.2

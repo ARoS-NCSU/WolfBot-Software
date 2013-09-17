@@ -8,11 +8,14 @@ wget -q -O- "http://debian.saltstack.com/debian-salt-team-joehealy.gpg.key" | ap
 apt-get update
 
 export DEBIAN_FRONTEND=noninteractive
-apt-get purge udhcpd
-apt-get install hostapd dnsmasq
-apt-get -y -o Dpkg::Options::="--force-confold" install ntp
 
-apt-get install salt-master
+DPKG_OPTS=Dpkg::Options::="--force-confold"
+
+apt-get -y purge udhcpd
+apt-get -y -o $DPKG_OPTS install hostapd dnsmasq
+apt-get -y -o $DPKG_OPTS install ntp
+
+apt-get -y -o $DPKG_OPTS install salt-master
 
 apt-get -y install bind9-host
 apt-get -y install vim

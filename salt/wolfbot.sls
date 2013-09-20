@@ -102,11 +102,47 @@ edimax_driver:
 /etc/wpa_supplicant.conf:
     file.managed:
         - source: salt://files/etc/wpa_supplicant.conf
-    
-# /etc/dhcp
 
-# wolfbot startup script
-# wolfbot software
+# /etc/dhcp/dhclient.conf ??
+/etc/dhcp/dhclient-exit-hooks.d/hostname:
+    file.managed:
+        - source: salt://files/etc/dhcp/dhclient-exit-hooks.d/hostname
+
+wolfbot:
+    file.managed:
+        - name: /etc/init.d/wolfbot
+        - source: salt://files/etc/init.d/wolfbot
+        - mode: 755
+    service:
+        - enabled
+
+/wolfbot/agent:
+    file.recurse:
+        - name: /wolfbot/agent
+        - source: salt://files/wolfbot/agent  # change to github tree on pm?
+        - clean: True
+        
+/wolfbot/config:
+    file.recurse:
+        - name: /wolfbot/config
+        - source: salt://files/wolfbot/config
+        - clean: True
+        
+/wolfbot/setup:
+    file.recurse:
+        - name: /wolfbot/setup
+        - source: salt://files/wolfbot/setup
+        - clean: True
+        - file_mode: 755
+        
+/wolfbot/util:
+    file.recurse:
+        - name: /wolfbot/util
+        - source: salt://files/wolfbot/util
+        - clean: True
+        - file_mode: 755
+        
+    
 # ssh keys
 
 

@@ -1,17 +1,25 @@
 #!/bin/bash
 
-# TODO: need a one-time script for first boot:
-#   depmond -a
-#   salt-pkgs
+# TODO: need a one-time script to depmod -a on first boot
 
-if [ x$1 == x ]; then
+image=$1
+device=$2
+
+if [ ! -f $image ]; then
+    echo "Can't find image file: $2"
+    exit 1
+fi
+
+if [ x$device == x ]; then
     echo "Need to specify device (sdX)"
     exit 1
 fi
 
-mount /dev/${1}2 /mnt/
+dd if=$image of=/dev/$device bs=1M
+
+mount /dev/${device}2 /mnt/
 if [ $? -ne 0 ]; then
-    echo "Failed to mount /dev/${1}2"
+    echo "Failed to mount /dev/${device}2"
     exit 1
 fi
 

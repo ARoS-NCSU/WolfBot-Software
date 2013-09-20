@@ -1,1 +1,1 @@
-rsync -vaL ../salt packmaster:/srv/
+rsync -vaL --delete ../salt packmaster:/srv/

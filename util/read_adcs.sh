@@ -1,12 +1,16 @@
 #!/bin/bash
 
-name[0]=D240
-name[2]=D120
-name[6]=D000
+name[0]=---
+name[1]=---
+name[2]=DMS
+name[3]=---
+name[4]=---
+name[5]=---
+name[6]=BAT
 
-for i in 6 2 0; do
-  cat /sys/devices/ocp.*/helper.*/AIN${i} > /dev/null
-  echo -n ${name[$i]}: 
+for i in `seq 0 6`; do
+  #cat /sys/devices/ocp.*/helper.*/AIN${i} > /dev/null
+  echo -n "$i : ${name[$i]} : "
   cat /sys/devices/ocp.*/helper.*/AIN${i}
 done
 

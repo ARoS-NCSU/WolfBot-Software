@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import sys
+sys.path.append('/wolfbot/agent')
 import wolfbot as wb
 import time
 

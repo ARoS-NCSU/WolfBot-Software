@@ -1,5 +1,6 @@
 import sys
-sys.path.append('pybbb')
+import os
+sys.path.append(os.path.dirname(__file__) + '/pybbb')
 import logging
 import yaml
 from math import sin, radians

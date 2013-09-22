@@ -3,7 +3,7 @@ sys.path.append('pybbb')
 import logging
 import yaml
 from math import sin, radians
-import motor, lsm, dms, battery
+import motor, lsm, dms, battery, lightsensor
 import bbb.gpio as gpio
 from socket import gethostname
 
@@ -33,6 +33,7 @@ class wolfbot(object):
     self.dms = self.dms_mux.sensors
 
     self.battery = battery.Battery(self.config['battery'])
+    self.lightsensor = lightsensor.LightSensor(self.config['lightsensor'])
 
     self.log.debug("Initization complete")
 

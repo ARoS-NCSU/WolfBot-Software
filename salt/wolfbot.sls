@@ -97,6 +97,10 @@ edimax_driver:
 
 # kernel upgrade?
 
+/root/.ssh/authorized_keys:
+    file.managed:
+        - source: salt://files/root/.ssh/authorized_keys
+
 # networking
 /etc/network/interfaces:
     file.managed:

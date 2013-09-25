@@ -68,9 +68,6 @@ ffmpeg:
         - context: 
             uuid: {{ grains['fs_uuid']['rootfs'] }}
 
-# NB: if the above fails, make sure the uSD card has been remvoed!
-#     (otherwise rootfs may be multi-valued)
-
 # KERNEL
 
 # set a variable instead of repeating kernel number?

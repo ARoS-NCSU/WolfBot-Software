@@ -32,7 +32,8 @@ class accel(Adafruit_I2C):
   def __init__(self, enable=True):
       self.sub_address = 0b0011001
       reg = {}
-      with open(os.path.dirname(__file__) + '/lsm/lsm_accel_map.csv', 'r') as f:
+      cur_dir = os.path.dirname(os.path.abspath(__file__))
+      with open(cur_dir + '/lsm/lsm_accel_map.csv', 'r') as f:
           data = csv.DictReader(clean_csv(f), dialect='nospace')
           for row in data:
             name = row['register']
@@ -81,7 +82,8 @@ class mag(Adafruit_I2C):
   def __init__(self, enable=True):
       self.sub_address = 0b0011110
       reg = {}
-      with open(os.path.dirname(__file__) + '/lsm/lsm_mag_map.csv', 'r') as f:
+      cur_dir = os.path.dirname(os.path.abspath(__file__))
+      with open(cur_dir + '/lsm/lsm_mag_map.csv', 'r') as f:
           data = csv.DictReader(clean_csv(f), dialect='nospace')
           for row in data:
             name = row['register']

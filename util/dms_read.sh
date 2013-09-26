@@ -1,20 +1,16 @@
 #!/bin/bash
 
-gpios=/sys/class/gpio
+base=/sys/class/gpio
 
-A=$gpios/gpio30/value
-B=$gpios/gpio3/value
-C=$gpios/gpio2/value
+SEL_A_GPIO=$base/gpio30/value  # low
+SEL_B_GPIO=$base/gpio3/value   # 
+SEL_C_GPIO=$base/gpio2/value   # high
 
+SEL_A=$(cat $SEL_A_GPIO)
+SEL_B=$(cat $SEL_B_GPIO)
+SEL_C=$(cat $SEL_C_GPIO)
 
-for i in "000 0 0 0" "060 0 0 1" "120 0 1 0" "180 0 1 1" "240 1 0 0" "300 1 0 1"; do
-    read angle c b a <<<$(echo $i)
-    echo -n "$c$b$a ($angle) : "
-    echo $a > $A
-    echo $b > $B
-    echo $c > $C
-    cat /sys/devices/ocp.*/helper.*/AIN2
-done
+NUM=$(( $SEL_A + 2*$SEL_B + 4*$SEL_C ))
 
-
-
+echo -n "DMS ($NUM): "
+cat /sys/devices/ocp.*/helper.*/AIN2

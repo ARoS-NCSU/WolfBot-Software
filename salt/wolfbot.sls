@@ -150,6 +150,13 @@ wolfbot:
         - clean: True
         - file_mode: 755
         
+/wolfbot/lib:
+    file.recurse:
+        - name: /wolfbot/lib
+        - source: salt://files/wolfbot/lib
+        - clean: True
+        - file_mode: 755
+        
     
 # ssh keys
 

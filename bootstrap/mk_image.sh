@@ -2,6 +2,11 @@
 
 # TODO: need a one-time script to depmod -a on first boot
 
+if [ $# -ne 2 ]; then
+    echo "$0 image sdX"
+    exit 1
+fi
+
 image=$1
 device=$2
 
@@ -30,11 +35,11 @@ if [ $? -eq 1 ]; then
     exit 1
 fi
 
-
 rsync -vr ../salt/files/root/.ssh /mnt/root/
 chown -R root.root /mnt/root/.ssh
 rsync -v ../salt/files/etc/wpa_supplicant.conf /mnt/etc
 rsync -rv ../salt/files/etc/modprobe.d /mnt/etc
+rsync -rv ../salt/files/etc/dhcp /mnt/etc
 rsync -rv ../salt/files/lib/modules /mnt/lib/
 rsync -v ../salt/files/etc/network/interfaces /mnt/etc/network
 

@@ -150,6 +150,13 @@ wolfbot:
         - clean: True
         - file_mode: 755
         
+/wolfbot/demos:
+    file.recurse:
+        - name: /wolfbot/demos
+        - source: salt://files/wolfbot/demos
+        - clean: True
+        - file_mode: 755
+        
 /wolfbot/lib:
     file.recurse:
         - name: /wolfbot/lib

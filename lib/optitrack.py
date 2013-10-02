@@ -1,11 +1,28 @@
 import socket
 import yaml
-from math import degrees,asin,atan2
+from math import degrees,asin,atan2,pi
 
-# NB: second version of conversions is from Jimit Patel's PacketClient.cpp
+# http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
+# NB: commented version from wikipedia, produces incorrect results?
 def euler(quat):
-    print "quat: ", quat
     x,y,z,w = quat
+
+    check = x*y + z*w
+    epsilon = 0.001
+    # North pole singularity
+    #print "Check: ", check
+    if( check > 0.5 - epsilon):
+        yaw = 2.0 * atan2(x,w);
+        pitch = pi/2
+        roll = 0
+        return degrees(yaw),degrees(pitch),degrees(roll)
+    # South pole singularity
+    if( check < -0.5 + epsilon):
+        yaw = -2.0 * atan2(x,w);
+        pitch = -pi/2
+        roll = 0
+        return degrees(yaw),degrees(pitch),degrees(roll)
+
 
     # roll(bank), phi, about x-axis
     #roll = atan2(2*(w*x+y*z),1-2*(x*x+y*y)) 
@@ -13,7 +30,7 @@ def euler(quat):
 
     # pitch(elevation), theta, about y-axis
     #pitch = asin(2*(w*y-x*z))
-    pitch = asin(2*(x*y+x*z))
+    pitch = asin(2*(x*y+z*w))
 
     # yaw(heading), psy, about z-axis
     #yaw = atan2(2*(w*z+x*y),1-2*(y*y+z*z))
@@ -41,7 +58,7 @@ class Optitrack(object):
                 #print "got msg"
             except socket.error:
                 if not msg:
-                    print "waiting for msg"
+                    #print "waiting for msg"
                     pass
                 else:
                     data = yaml.load(msg)

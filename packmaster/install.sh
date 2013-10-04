@@ -1,12 +1,21 @@
 #!/bin/sh
 
+# one time networking setup
 route add default gw 192.168.7.1
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
+wget -q -O- "http://debian.saltstack.com/debian-salt-team-joehealy.gpg.key" | apt-key add -
+apt-get update
+
 export DEBIAN_FRONTEND=noninteractive
-apt-get install hostapd
-apt-get insall salt-master
-apt-get -y -o Dpkg::Options::="--force-confold" install ntp
+
+DPKG_OPTS=Dpkg::Options::="--force-confold"
+
+apt-get -y purge udhcpd
+apt-get -y -o $DPKG_OPTS install hostapd dnsmasq
+apt-get -y -o $DPKG_OPTS install ntp
+
+apt-get -y -o $DPKG_OPTS install salt-master
 
 apt-get -y install bind9-host
 apt-get -y install vim
@@ -17,4 +26,4 @@ dpkg-reconfigure -f noninteractive tzdata
 
 depmod -a
 
-
+update-rc.d masquerade defaults

@@ -62,4 +62,10 @@ class Optitrack(object):
                     pass
                 else:
                     data = yaml.load(msg)
-                    return euler(data['orientation'])
+                    return data['position'],euler(data['orientation'])
+
+    def get_position(self):
+        return self.get_tracking()[0]
+
+    def get_orientation(self):
+        return self.get_tracking()[1]

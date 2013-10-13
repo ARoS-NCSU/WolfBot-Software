@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Updating packmaster filesystem"
-rsync -vr fs/* packmaster:/
+rsync -vr fs/* root@packmaster:/
 
 echo "Updating salt files"
-rsync -vaL --exclude .git --delete ../salt packmaster:/srv/
+rsync -vaL --exclude .git --delete ../salt root@packmaster:/srv/

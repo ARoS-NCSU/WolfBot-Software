@@ -7,3 +7,4 @@ max_pulse=2400000
 ((step=$range/180))
 ((pulse=$min_pulse+$1*$step))
 echo $pulse > /sys/class/pwm/pwm2/duty_ns
+echo 1 > /sys/class/pwm/pwm2/run

@@ -127,6 +127,8 @@ outfile = file(args.outfile, 'w')
 outfile.write("Time WolfBot Target Z X Value\n")
 
 for tid,tgt in enumerate(bot_targets):
+    tgt_z = tgt[0]
+    tgt_x = tgt[1]
     log.info("Going to: %0.2f, %0.2f" % tgt)
     goto(*tgt, dist_eps=0.03, angle_eps=1)
     log.info("Arrived at: %0.2f, %0.2f" % tgt)
@@ -134,9 +136,9 @@ for tid,tgt in enumerate(bot_targets):
     val = w.lightsensor.adc.read()
     log.info("Survey says: %s" % val)
     # log result
-    position,orientation = opti.get_tracking()
-    x,_,z = position
-    outfile.write("%0.2f %s %d %0.2f %0.2f %d\n" % (time.time(), name, tid+start, z, x, val))
+    #position,orientation = opti.get_tracking()
+    #x,_,z = position
+    outfile.write("%0.2f %s %d %0.2f %0.2f %d\n" % (time.time(), name, tid+start, tgt_z, tgt_x, val))
 
 outfile.close()
 w.stop()

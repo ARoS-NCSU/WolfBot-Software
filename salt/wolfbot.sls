@@ -33,6 +33,7 @@ wolfbot_python_reqs:
             - python-yaml
             - python-smbus
             - python-numpy
+            - python-scipy
 
 deb-multimedia-keyring:
     pkg.latest:

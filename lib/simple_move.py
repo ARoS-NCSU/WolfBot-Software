@@ -69,10 +69,15 @@ def goto(w, to_z, to_x, to_theta, localizer, dist_eps=0.01, angle_eps=1):
     ang_dist = 999
     prev_dist = 999
     bonus = 0
-    
+  
+    to_theta %= 360  # [0,360)
+    if to_theta > 180:
+        to_theta -= 360  # (-180,180]
+
     while abs(ang_dist) > angle_eps:
         angle = localizer()['yaw']
         ang_dist = to_theta - angle
+        # TODO(jcschorn): would it be simpler just to normalize ang_dist to (-180,180]?
         if abs(ang_dist) < 180:
             if ang_dist > 0:
                 dir = 'ccw'
@@ -86,7 +91,11 @@ def goto(w, to_z, to_x, to_theta, localizer, dist_eps=0.01, angle_eps=1):
             else:
                 ang_dist += 360
                 dir = 'ccw'
-        assert(0 <= ang_dist <= 180)
+        try:
+            assert 0 <= ang_dist <= 180
+        except AssertionError:
+            log.warning("Angle: %0.1f, to_theta: %0.1f => ang_dist = %0.1f (%s)", 
+                    angle, to_theta, ang_dist, dir)
 
         slow = 75*angle_eps
         if ang_dist > slow:

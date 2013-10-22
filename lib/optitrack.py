@@ -49,8 +49,10 @@ class Optitrack(object):
         self.buffer = 1024
 
 
-    def get_tracking(self):
-        """ Read through the receive buffer until we get the latest position """
+    def get_pose(self):
+        """ Read through the receive buffer until we get the latest position
+            Returns a dictionary of: {x, y, z, yaw, pitch, roll}
+        """
         msg = None
         while True:
             try:
@@ -62,10 +64,15 @@ class Optitrack(object):
                     pass
                 else:
                     data = yaml.load(msg)
-                    return data['position'],euler(data['orientation'])
+                    position = data['position']
+                    orientation = euler(data['orientation'])
+                    return {'x':position[0], 'y':position[1], 'z':position[2],
+                            'yaw':orientation[0], 'pitch':orientation[1], 'roll':orientation[2]}
 
     def get_position(self):
-        return self.get_tracking()[0]
+        pose = self.get_pose()
+        return pose['x'], pose['y'], pose['z']
 
     def get_orientation(self):
-        return self.get_tracking()[1]
+        pose = self.get_pose()
+        return pose['yaw'], pose['pitch'], pose['roll']

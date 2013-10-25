@@ -21,29 +21,19 @@ size = args.size
 w = wb.wolfbot()
 opti = optitrack.Optitrack()
 
-per_side = int(round(math.sqrt(n)))
+per_side = int(math.ceil(math.sqrt(n)))
 spacing = size / (per_side-1)
 
 z_i = w.config['id'] % per_side
 x_i = (w.config['id'] % n) / per_side
 
-
 print "Num: ", n
 print "Per side: ", per_side
-
-
 print "Size: ", size 
 print "Spacing: ", spacing
 print
 print "z_i: ", z_i
 print "x_i: ", x_i
-
-if per_side % 2:  # odd
-    offset = 0
-    print "No offset"
-else:
-    offset = 1
-    print "Using offset"
 
 z = -size/2 + spacing*z_i
 x = -size/2 + spacing*x_i

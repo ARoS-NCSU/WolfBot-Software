@@ -213,6 +213,10 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--debug', action='store_true', default=False)
+    parser.add_argument('-zl', '--zlow', type=float, default=-1.0)
+    parser.add_argument('-zh', '--zhigh', type=float, default=+1.0)
+    parser.add_argument('-xl', '--xlow', type=float, default=-1.0)
+    parser.add_argument('-xh', '--xhigh', type=float, default=+1.0)
     args = parser.parse_args()
 
     LOG_FORMAT = '%(asctime)s %(name)s | %(levelname)s | %(message)s'
@@ -223,7 +227,7 @@ if __name__ == '__main__':
     log = logging.getLogger(__name__)
     log.info('Startup!')
 
-    angle = 90
+    angle = random.uniform(-180,180)
     mag = 100
     w.move(angle,mag)
 
@@ -235,6 +239,6 @@ if __name__ == '__main__':
         # safe area at approx (z,x) : (-1.60, -1.25) - (+1.15, +1.65)
         #angle,mag = bounce_box(angle, mag, coords=[-1.6, -1.25, 0.0, 0.0])
 
-        angle, mag = sensor_box(angle, mag, coords = [-1.0, -1.0, 1.0, 1.0])
+        angle, mag = sensor_box(angle, mag, coords = [args.zlow, args.xlow, args.zhigh, args.xhigh])
         log.info("Moving: %0.1f @ %0.1f", mag, angle)
 

@@ -34,7 +34,7 @@ while True:
     x_tot = 0.0
     y_tot = 0.0
     for name, val in sorted(dms.items()):
-        angle = 360 - name
+        angle = name
         #print "name: ", name, "angle: ", angle, "val: ", val
 
         if val > 800:

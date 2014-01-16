@@ -1,0 +1,29 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# Optionally use wired ethernet as uplink
+iface eth0 inet dhcp
+
+# WolfBot network (hostap)
+auto wlan0
+iface wlan0 inet static
+    address 10.1.2.1
+    netmask 255.255.255.0
+
+auto wlan1
+iface wlan1 inet dhcp
+    wireless-essid ncsu
+    # aros (or try wpa_supplicant)
+    # wpa-ssid
+    # wpa-psk
+
+# Ethernet over USB
+iface usb0 inet static
+    address 192.168.7.2
+    netmask 255.255.255.0
+    network 192.168.7.0
+    gateway 192.168.7.1

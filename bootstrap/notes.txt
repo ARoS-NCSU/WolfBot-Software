@@ -1,0 +1,62 @@
+setup
+-----
+
+- add new wolfbot config in git repo (configs/wb-??)
+
+- boot Debian from uSD (power via USB, adapter)
+- wait for 4 lights
+- remove uSD card
+
+- boot from eMMC with USB cable (no power)
+- verify ethernet over usb is up (ping 192.168.7.2)
+- in git repo: cd bootstrap
+- run install_over_usb.sh using salt>17.4 (development version via virutual env)
+
+- power wolfbot
+- ssh through USB to get MAC address of wifi
+- if necessary reboot while powered to get WiFi adapter to load
+- add MAC to packmaster's DHCP server conf (packmaster/salt/files/etc/dnsmasq.conf)
+- update packmaster (cd packmaster; ./update_via_wifi.sh)
+
+- reboot wolfbot, verify new IP
+- run install_over_usb.sh again
+- salt-minion should now be running
+
+- on packmaster
+  - salt-key ; salt-key -a wb-??
+  - if new key is not wb-?? (like arm)
+     - iremove /etc/salt/minion_id on wolfbot and restart salt-minion
+  - salt -t 30 'wb-??' test.ping 
+  - salt 'wb-??' state.highstate
+
+
+todo:
+-----
+- gitfs backend for packmaster
+- break sls file into pieces (timedate, python, salt, networking)
+- verify msgpack prereq for salt-ssh
+- fix symlink insanity
+   - packmaster/salt/files/srv/salt -> ../../....
+   - packmaster/salt/files/srv/salt/files/wolfbot/* -> ../../....
+- create common salt repo?
+- check uInitrd vs. initrd.img
+- clear /etc/udev/rules.d/persist*
+- mac addresses check
+- wolfbot config file check
+
+
+old steps
+---------
+  - mk_image
+  - boot sdcard
+  - wait for install to finish (4 lights)
+  - remove sdcard, reboot
+  - depmod -a ; reboot
+  - add mac address from pm:/var/lib/misc/dnsmasq.leases 
+  - packmaster/update.sh
+  - restart dnsmasq on packmaster
+  - reboot wolfbot
+  - dpkg --unpack /root/salt_pkgs/*.deb ; apt-get install -f 
+  - accept new wb-* key on pm
+  - salt 'wb-*' state.highstate
+

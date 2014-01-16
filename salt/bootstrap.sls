@@ -87,13 +87,6 @@ ffmpeg:
         - name: /etc/ffserver.conf
         - source: salt://files/etc/ffserver.conf
 
-/boot/uboot/uEnv.txt:
-    file.managed:
-        - source: salt://files/boot/uboot/uEnv.txt
-        - template: jinja
-        - context: 
-            uuid: {{ grains['fs_uuid']['rootfs'] }}
-
 # NB: if the above fails, make sure the uSD card has been remvoed!
 #     (otherwise rootfs may be multi-valued)
 

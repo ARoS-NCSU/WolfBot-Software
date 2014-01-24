@@ -91,6 +91,9 @@ hostapd:
 vim:
     pkg.installed
 
+screen:
+    pkg.installed
+
 bind9-host:
     pkg.installed
 

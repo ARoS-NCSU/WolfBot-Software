@@ -137,9 +137,11 @@ edimax_driver_32:
         - source: salt://files/root/.ssh/authorized_keys
 
 # networking
-/etc/network/interfaces:
+
+# TODO: how to set WPA password from template?
+/etc/network/interfaces.template:
     file.managed:
-        - source: salt://files/etc/network/interfaces
+        - source: salt://files/etc/network/interfaces.template
 
 /etc/wpa_supplicant.conf:
     file.managed:

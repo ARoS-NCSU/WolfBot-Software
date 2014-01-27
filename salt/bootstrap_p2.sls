@@ -31,8 +31,7 @@ saltstack_repo:
         - pkg: python-apt
 
 salt-minion:
-    pkg.installed:
-        - version: 0.17.4-1~bpo70+1~dst.1
+    pkg.latest:
         - skip_verify: True
     service:
         - running

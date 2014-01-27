@@ -29,6 +29,8 @@ def goto(w, to_z, to_x, to_theta, localizer, dist_eps=0.01, angle_eps=1):
     dist = 99
     prev_dist = 99
     bonus = 0
+
+    # TODO: should probably check this at least twice, to catch "passing through" target
     while dist > dist_eps:
         pose = localizer()
         log.debug("Z: %0.3f, X: %0.3f @ %0.2f" % (pose['z'],pose['x'],pose['yaw']))
@@ -74,6 +76,7 @@ def goto(w, to_z, to_x, to_theta, localizer, dist_eps=0.01, angle_eps=1):
     if to_theta > 180:
         to_theta -= 360  # (-180,180]
 
+    # TODO: should probably check this at least twice, to catch "passing through" target
     while abs(ang_dist) > angle_eps:
         angle = localizer()['yaw']
         ang_dist = to_theta - angle

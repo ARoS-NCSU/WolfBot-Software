@@ -66,8 +66,15 @@ class Optitrack(object):
                     data = yaml.load(msg)
                     position = data['position']
                     orientation = euler(data['orientation'])
-                    return {'x':position[0], 'y':position[1], 'z':position[2],
-                            'yaw':orientation[0], 'pitch':orientation[1], 'roll':orientation[2]}
+                    x,y,z = position
+                    yaw,pitch,roll = orientation
+                    if x == y == z == yaw == pitch == roll == 0.00:
+                        #print "BAD pose data!"
+                        # should we return with an exception/flag or keep trying??
+                        pass
+                    else:
+                        return {'x':x, 'y':y, 'z':z, 
+                                'yaw':yaw, 'pitch':pitch, 'roll':roll}
 
     def get_position(self):
         pose = self.get_pose()

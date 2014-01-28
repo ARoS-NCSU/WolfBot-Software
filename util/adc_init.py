@@ -16,41 +16,112 @@ opti = optitrack.Optitrack()
 pose = opti.get_pose
 
 move(w,-1.32,0.831,180,pose)
-adc6in000 = w.dms[0].read()
+a =  w.dms[0].read() 
+move(w,-1.32,0.831,180,pose)
+b =  w.dms[0].read()
+move(w,-1.32,0.831,180,pose)
+c =  w.dms[0].read()
+adc6in000 = (a+b+c)/3
 print "D_000 reads ", adc6in000," at 6 inches."
+
 move(w,-1.32,0.831,120,pose)
-adc6in060 = w.dms[60].read()
+a =  w.dms[60].read()
+move(w,-1.32,0.831,120,pose)
+b = w.dms[60].read()
+move(w,-1.32,0.831,120,pose)
+c = w.dms[60].read()
+adc6in060 = (a+b+c)/3
 print "D_060 reads ", adc6in060," at 6 inches."
+
 move(w,-1.32,0.831,60,pose)
-adc6in120 = w.dms[120].read()
+a = w.dms[120].read()
+move(w,-1.32,0.831,60,pose)
+b = w.dms[120].read()
+move(w,-1.32,0.831,60,pose)
+c = w.dms[120].read()
+adc6in120 = (a+b+c)/3
 print "D_120 reads ", adc6in120," at 6 inches."
+
 move(w,-1.32,0.831,0,pose)
-adc6in180 = w.dms[180].read()
+a = w.dms[180].read()
+move(w,-1.32,0.831,0,pose)
+b = w.dms[180].read()
+move(w,-1.32,0.831,0,pose)
+c = w.dms[180].read()
+adc6in180 = (a+b+c)/3
 print "D_180 reads ", adc6in180," at 6 inches."
+
 move(w,-1.32,0.831,300,pose)
-adc6in240 = w.dms[240].read()
+a = w.dms[240].read()
+move(w,-1.32,0.831,300,pose)
+b = w.dms[240].read()
+move(w,-1.32,0.831,300,pose)
+c = w.dms[240].read()
+adc6in240 = (a+b+c)/3
 print "D_240 reads ", adc6in240," at 6 inches."
+
 move(w,-1.32,0.831,240,pose)
-adc6in300 = w.dms[300].read()
+a =  w.dms[300].read()
+move(w,-1.32,0.831,240,pose)
+b =  w.dms[300].read()
+move(w,-1.32,0.831,240,pose)
+c =  w.dms[300].read()
+adc6in300 = (a+b+c)/3
 print "D_300 reads ", adc6in300," at 6 inches."
 
+print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 move(w,-1.0062,0.831,180,pose)
-adc12in000 = w.dms[0].read()
+a = w.dms[0].read()
+move(w,-1.0062,0.831,180,pose)
+b = w.dms[0].read()
+move(w,-1.0062,0.831,180,pose)
+c = w.dms[0].read()
+adc12in000 = (a+b+c)/3
 print "D_000 reads ", adc12in000," at 12 inches."
+
 move(w,-1.0062,0.831,120,pose)
-adc12in060 = w.dms[60].read()
+a = w.dms[60].read()
+move(w,-1.0062,0.831,120,pose)
+b = w.dms[60].read()
+move(w,-1.0062,0.831,120,pose)
+c = w.dms[60].read()
+adc12in060 = (a+b+c)/3
 print "D_060 reads ", adc12in060," at 12 inches."
+
 move(w,-1.0062,0.831,60,pose)
-adc12in120 = w.dms[120].read()
+a = w.dms[120].read()
+move(w,-1.0062,0.831,60,pose)
+b = w.dms[120].read()
+move(w,-1.0062,0.831,60,pose)
+c = w.dms[120].read()
+adc12in120 = (a+b+c)/3
 print "D_120 reads ", adc12in120," at 12 inches."
+
 move(w,-1.0062,0.831,0,pose)
-adc12in180 = w.dms[180].read()
+a = w.dms[180].read()
+move(w,-1.0062,0.831,0,pose)
+b = w.dms[180].read()
+move(w,-1.0062,0.831,0,pose)
+c = w.dms[180].read()
+adc12in180 = (a+b+c)/3
 print "D_180 reads ", adc12in180," at 12 inches."
+
 move(w,-1.0062,0.831,300,pose)
-adc12in240 = w.dms[240].read()
+a = w.dms[240].read()
+move(w,-1.0062,0.831,300,pose)
+b = w.dms[240].read()
+move(w,-1.0062,0.831,300,pose)
+c = w.dms[240].read()
+adc12in240 = (a+b+c)/3
 print "D_240 reads ", adc12in240," at 12 inches."
+
 move(w,-1.0062,0.831,240,pose)
-adc12in300 = w.dms[300].read()
+a = w.dms[300].read()
+move(w,-1.0062,0.831,240,pose)
+b = w.dms[300].read()
+move(w,-1.0062,0.831,240,pose)
+c = w.dms[300].read()
+adc12in300 = (a+b+c)/3
 print "D_300 reads ", adc12in300," at 12  inches."
 
 # Slope, m, formula: y=mx+b

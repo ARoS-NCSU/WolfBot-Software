@@ -8,6 +8,8 @@ class Battery(object):
 
     def voltage(self):
         # adcs are 12-bit, but report a millivolt value via SysFS
-        voltage = (self.adc.read() / 1000.0) / self.ratio
-        return voltage
+	n = 20
+	samples = [ self.adc.read() for i in range(n) ]
+        average =  (sum(samples) / n)
+        return average / (1000.0 * self.ratio)
 

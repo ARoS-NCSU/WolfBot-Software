@@ -4,19 +4,22 @@ import sys
 sys.path.append('/wolfbot/agent')
 sys.path.append('/wolfbot/lib')
 
+import argparse
 import wolfbot as wb
 import time
 import math
 from random import uniform as rand
 
+parser = argparse.ArgumentParser()
+parser.add_argument('runtime', type=float, default=0.0)
+args = parser.parse_args()
 w = wb.wolfbot()
 f = open('obstacle_times.txt', 'w')
 max_adc = 500
 quick_sleep = 0.5
 sixft_time = 7.5 #estimates how long it takes bot to travel 6 ft
-run_time = 30  #how long in seconds to run experiment
+run_time = args.runtime  #how long in seconds to run experiment
 t0 = time.time() #set initial time of experiment
-f.write('Epoch: %.4f\n' %t0)
 
 def check_dist():
 	max_sensor = 0

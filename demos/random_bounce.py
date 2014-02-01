@@ -15,7 +15,7 @@ parser.add_argument('runtime', type=float, default=0.0)
 args = parser.parse_args()
 w = wb.wolfbot()
 filename = 'obstacle_times_'+w.hostname+'.txt'
-f = open(filenames, 'w')
+f = open(filename, 'w')
 max_adc = 500
 quick_sleep = 0.5
 sixft_time = 7.5 #estimates how long it takes bot to travel 6 ft

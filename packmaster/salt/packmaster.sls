@@ -21,7 +21,7 @@ python-apt:
 # Currently using skip_verify to handle unverified packages. Should fix by updating keyring, e.g.:
 #   wget -q -O- "http://debian.saltstack.com/debian-salt-team-joehealy.gpg.key" | apt-key add -
 salt-master:
-    pkg.installed:
+    pkg.latest:
         - skip_verify: True
     service:
         - running

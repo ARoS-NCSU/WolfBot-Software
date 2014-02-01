@@ -46,8 +46,7 @@ saltstack_repo:
         - pkg: python-apt
 
 salt-minion:
-    pkg.installed:
-        - version: 0.17.4-1~bpo70+1~dst.1
+    pkg.latest:
         - skip_verify: True
     service:
         - running
@@ -100,15 +99,6 @@ ffmpeg:
 # KERNEL
 
 # set a variable instead of repeating kernel number?
-edimax_driver_26:
-    file.managed:
-        - name: /lib/modules/3.8.13-bone26/8192cu.ko
-        - source: salt://files/lib/modules/3.8.13-bone26/8192cu.ko
-    cmd.wait:
-        - name: depmod -a
-        - watch: 
-            - file: /lib/modules/3.8.13-bone26/8192cu.ko
-
 edimax_driver_32:
     file.managed:
         - name: /lib/modules/3.8.13-bone32/8192cu.ko
@@ -117,6 +107,15 @@ edimax_driver_32:
         - name: depmod -a
         - watch: 
             - file: /lib/modules/3.8.13-bone32/8192cu.ko
+
+edimax_driver_37:
+    file.managed:
+        - name: /lib/modules/3.8.13-bone37/8192cu.ko
+        - source: salt://files/lib/modules/3.8.13-bone37/8192cu.ko
+    cmd.wait:
+        - name: depmod -a
+        - watch: 
+            - file: /lib/modules/3.8.13-bone37/8192cu.ko
 
 /etc/modprobe.d/8192cu.conf:
     file.managed:
@@ -139,9 +138,11 @@ edimax_driver_32:
 # networking
 
 # TODO: how to set WPA password from template?
-/etc/network/interfaces.template:
+#/etc/network/interfaces.template:
+/etc/network/interfaces:
     file.managed:
-        - source: salt://files/etc/network/interfaces.template
+        - source: salt://files/etc/network/interfaces
+        #- source: salt://files/etc/network/interfaces.template
 
 /etc/wpa_supplicant.conf:
     file.managed:

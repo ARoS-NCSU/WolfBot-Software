@@ -7,6 +7,15 @@ edimax_driver_32:
         - watch: 
             - file: /lib/modules/3.8.13-bone32/8192cu.ko
 
+edimax_driver_37:
+    file.managed:
+        - name: /lib/modules/3.8.13-bone37/8192cu.ko
+        - source: salt://files/lib/modules/3.8.13-bone37/8192cu.ko
+    cmd.wait:
+        - name: depmod -a
+        - watch: 
+            - file: /lib/modules/3.8.13-bone37/8192cu.ko
+
 /etc/modprobe.d/8192cu.conf:
     file.managed:
         - source: salt://files/etc/modprobe.d/8192cu.conf

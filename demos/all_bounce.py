@@ -18,8 +18,8 @@ args = parser.parse_args()
 w = wb.wolfbot()
 
 timestring = time.strftime("_%Y_%m_%d_%H%M")
-obsfile = 'obstacle_times_'+w.hostname+timestring+'.txt'
-adcfile = 'adc_stream_'+w.hostname+timestring+'.txt'
+obsfile = '/root/obstacle_times_'+w.hostname+timestring+'.txt'
+adcfile = '/root/adc_stream_'+w.hostname+timestring+'.txt'
 obs_write = open(obsfile, 'w')
 adc_write = open(adcfile, 'w')
 

@@ -36,6 +36,7 @@ def avoid(sensor):
 	w.move(rand(away_angle-80, away_angle+80))
 	f.write('%.4f\n' %(time.time()-t0))
 
+f.write('Epoch Time: %.4f\n' %t0)
 while 1:
 	t_path = time.time()
 	w.move(rand(0,360))

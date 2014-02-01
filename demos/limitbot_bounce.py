@@ -8,11 +8,19 @@ import argparse
 import wolfbot as wb
 import time
 import math
+import signal
+import os
 from random import uniform as rand
 
 parser = argparse.ArgumentParser()
 parser.add_argument('runtime', type=float, default=0.0)
+parser.add_argument('-b', action='append', dest='bots',
+                    default=[],
+                    help='Add bot numbers to move',
+                    )
+
 args = parser.parse_args()
+print args.bots
 w = wb.wolfbot()
 
 timestring = time.strftime("_%Y_%m_%d_%H%M")
@@ -26,6 +34,10 @@ quick_sleep = 0.5
 sixft_time = 7.5 #estimates how long it takes bot to travel 6 ft
 run_time = args.runtime  #how long in seconds to run experiment
 t0 = time.time() #set initial time of experiment
+
+def cleanup(signum, frame):
+        w.stop()
+        os._exit(0)
 
 def check_dist():
 	max_sensor = 0
@@ -51,16 +63,24 @@ def avoid(sensor):
 	t = time.time()-t0
 	obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
 
+def record_adcs():
+	read_all_string = [str(vals[i]) for i in sorted(vals)]
+        t = time.time()-t0
+        obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
+
+signal.signal(signal.SIGINT, cleanup)
+signal.signal(signal.SIGTERM, cleanup)
 vals = {}
 obs_write.write('Epoch Time: %.4f\n' %t0)
 adc_write.write('Epoch Time: %.4f\n' %t0)
 obs_write.write('time, D_000, D_060, D_120, D_180, D_240, D_300\n')
 adc_write.write('time, D_000, D_060, D_120, D_180, D_240, D_300\n')
 
-while 1:
-	t_path = time.time()
-	w.move(rand(0,360))
-	while (time.time() - t_path) < sixft_time:	
+if str(w.config['id']) in args.bots:
+	while 1:
+	   t_path = time.time()
+	   w.move(rand(0,360))
+	   while (time.time() - t_path) < sixft_time:	
 		if (time.time()-t0) >= run_time:
 			w.stop()
 			obs_write.close()
@@ -71,8 +91,16 @@ while 1:
 			avoid(sensor)
 			t_path = time.time()	
 			time.sleep(quick_sleep)	
-	
+
+else:           
+	while (time.time() - t0) < run_time:
+        	sensor = check_dist()
+                if sensor != None:
+                        record_adcs()
+
+        
 w.stop()
 obs_write.close()
 adc_write.close()
 exit()
+

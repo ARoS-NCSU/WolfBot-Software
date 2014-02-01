@@ -8,6 +8,8 @@ import argparse
 import wolfbot as wb
 import time
 import math
+import signal 
+import os
 from random import uniform as rand
 
 parser = argparse.ArgumentParser()
@@ -26,6 +28,10 @@ quick_sleep = 0.5
 sixft_time = 7.5 #estimates how long it takes bot to travel 6 ft
 run_time = args.runtime  #how long in seconds to run experiment
 t0 = time.time() #set initial time of experiment
+
+def cleanup(signum, frame):
+	w.stop()
+    	os._exit(0)
 
 def check_dist():
 	max_sensor = 0
@@ -51,6 +57,8 @@ def avoid(sensor):
 	t = time.time()-t0
 	obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
 
+signal.signal(signal.SIGINT, cleanup)
+signal.signal(signal.SIGTERM, cleanup)
 vals = {}
 obs_write.write('Epoch Time: %.4f\n' %t0)
 adc_write.write('Epoch Time: %.4f\n' %t0)

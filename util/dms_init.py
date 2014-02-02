@@ -9,11 +9,11 @@ import optitrack
 import simple_move
 import math
 
+w = wb.wolfbot()
 from simple_move import goto as move
 dmsfile = '/root/'+w.hostname+'_dms_calibrations.txt'
 dms_write = open(dmsfile, 'w')
 
-w = wb.wolfbot()
 opti = optitrack.Optitrack()
 pose = opti.get_pose
 

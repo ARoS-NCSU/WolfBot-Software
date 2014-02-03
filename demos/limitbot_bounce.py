@@ -14,12 +14,11 @@ from random import uniform as rand
 
 parser = argparse.ArgumentParser()
 parser.add_argument('runtime', type=float, default=0.0)
-parser.add_argument('-b', action='append', dest='bots',
-                    default=[],
-                    help='Add bot numbers to move',
-                    )
+parser.add_argument('-x', dest='exclude', help='Add bot numbers to not move')
 
 args = parser.parse_args()
+
+excludes = args.exclude.split(",")
 
 w = wb.wolfbot()
 
@@ -80,7 +79,7 @@ adc_write.write('Epoch Time: %.4f\n' %t0)
 obs_write.write('time, D_000, D_060, D_120, D_180, D_240, D_300\n')
 adc_write.write('time, D_000, D_060, D_120, D_180, D_240, D_300\n')
 
-if str(w.config['id']) in args.bots:
+if str(w.config['id']) not in excludes:
     while 1:
        t_path = time.time()
        w.move(rand(0,360))

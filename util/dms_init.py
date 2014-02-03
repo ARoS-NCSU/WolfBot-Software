@@ -18,6 +18,7 @@ opti = optitrack.Optitrack()
 pose = opti.get_pose
 
 move(w,-1.32,0.831,180,pose)
+move(w,-1.32,0.831,180,pose)
 a =  w.dms[0].read() 
 move(w,-1.32,0.831,180,pose)
 b =  w.dms[0].read()
@@ -78,6 +79,7 @@ print "D_300 reads ", adc6in300," at 6 inches."
 dms_write.write('D_300 reads %.3f'%adc6in300+' at 6 inches.\n')
 
 print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+move(w,-1.0062,0.831,180,pose)
 move(w,-1.0062,0.831,180,pose)
 a = w.dms[0].read()
 move(w,-1.0062,0.831,180,pose)

@@ -20,7 +20,7 @@ parser.add_argument('-b', action='append', dest='bots',
                     )
 
 args = parser.parse_args()
-print args.bots
+
 w = wb.wolfbot()
 
 timestring = time.strftime("_%Y_%m_%d_%H%M")

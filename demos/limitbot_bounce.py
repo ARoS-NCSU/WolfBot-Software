@@ -36,67 +36,71 @@ run_time = args.runtime  #how long in seconds to run experiment
 t0 = time.time() #set initial time of experiment
 
 def cleanup(signum, frame):
-        w.stop()
-        os._exit(0)
+    w.stop()
+    os._exit(0)
 
 def check_dist():
-	min_sensor = 0
-	vals = w.dms_mux.read_all(mode='inch')
-        read_all_string = [str(vals[i]) for i in sorted(vals)]
-        t = time.time()-t0
-        adc_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
-	for i in range(6):
-		sensor = i*60
-		reading = vals[sensor]
-		if reading >= vals[min_sensor]:
-			min_sensor = sensor 
-	if vals[min_sensor] < min_dst:
-		return(max_sensor) #returns value only if obstacle in range
-	else: 
-		return None
+    global vals
+    min_sensor = 0
+    vals = w.dms_mux.read_all(mode='inch')
+    read_all_string = [str(vals[i]) for i in sorted(vals)]
+    t = time.time()-t0
+    adc_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
+    for i in range(6):
+        sensor = i*60
+        reading = vals[sensor]
+        if reading <= vals[min_sensor]:
+            min_sensor = sensor 
+    if vals[min_sensor] < min_dst:
+        return(min_sensor) #returns value only if obstacle in range
+    else: 
+        return None
 
 def avoid(sensor):
-	away_angle = sensor+180	
-	w.move(rand(away_angle-80, away_angle+80))
-        # vals = w.dms_mux.read_all()
-        read_all_string = [str(vals[i]) for i in sorted(vals)]
-	t = time.time()-t0
-	obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
+    global vals
+    away_angle = sensor+180    
+    w.move(rand(away_angle-80, away_angle+80))
+    # vals = w.dms_mux.read_all()
+    read_all_string = [str(vals[i]) for i in sorted(vals)]
+    t = time.time()-t0
+    obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
 
 def record_adcs():
-	read_all_string = [str(vals[i]) for i in sorted(vals)]
-        t = time.time()-t0
-        obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
+    read_all_string = [str(vals[i]) for i in sorted(vals)]
+    t = time.time()-t0
+    obs_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
 
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
-vals = {}
+
+vals = []
+
 obs_write.write('Epoch Time: %.4f\n' %t0)
 adc_write.write('Epoch Time: %.4f\n' %t0)
 obs_write.write('time, D_000, D_060, D_120, D_180, D_240, D_300\n')
 adc_write.write('time, D_000, D_060, D_120, D_180, D_240, D_300\n')
 
 if str(w.config['id']) in args.bots:
-	while 1:
-	   t_path = time.time()
-	   w.move(rand(0,360))
-	   while (time.time() - t_path) < sixft_time:	
-		if (time.time()-t0) >= run_time:
-			w.stop()
-			obs_write.close()
-			adc_write.close()
-			exit()
-		sensor = check_dist()
-		if sensor != None:
-			avoid(sensor)
-			t_path = time.time()	
-			time.sleep(quick_sleep)	
+    while 1:
+       t_path = time.time()
+       w.move(rand(0,360))
+       while (time.time() - t_path) < sixft_time:    
+        if (time.time()-t0) >= run_time:
+            w.stop()
+            obs_write.close()
+            adc_write.close()
+            exit()
+        sensor = check_dist()
+        if sensor != None:
+            avoid(sensor)
+            t_path = time.time()    
+            time.sleep(quick_sleep)    
 
 else:           
-	while (time.time() - t0) < run_time:
-        	sensor = check_dist()
-                if sensor != None:
-                        record_adcs()
+    while (time.time() - t0) < run_time:
+        sensor = check_dist()
+        if sensor != None:
+            record_adcs()
 
         
 w.stop()

@@ -15,7 +15,7 @@ class DmsMux(object):
         for sensor_config in mux_config['sensors']:
             name = sensor_config['angle']
             # address reads in as an integer, even if config uses binary
-            self.sensors[name] = DmsMuxSensor(self, name, sensor_config['address'])
+            self.sensors[name] = DmsMuxSensor(self, name, sensor_config)
 
         self.config = mux_config
 
@@ -32,48 +32,34 @@ class DmsMux(object):
     def read(self):
         return self.adc.read()
         
-    def read_all(self):
+    def read_all(self, mode='raw'):
         #result = {}
         #for s in self.sensors:
         #    result[s.name] = s.read()
-        return { name:sensor.read() for name,sensor in self.sensors.items() }
+        return { name:sensor.read(mode) for name,sensor in self.sensors.items() }
          
 # a single sensor from a multiplexed group
 class DmsMuxSensor(object):
-    def __init__(self, mux, name, address):
+    def __init__(self, mux, name, config):
         self.name = name
-        self.address = address 
         self.mux = mux
+        self.config = config
+        self.address = config['address']
+        self.slope_inches = float(config['slope_inches'])
+        self.offset = float(config['offset'])
 
-    def read(self):
+    def read(self, mode='raw'):
         self.mux.select(self.address)
+        if mode == 'inch':
+            return self._inches()
+        else:
+            return self._raw()
+
+    def _raw(self):
         return self.mux.adc.read()
 
+    # offset and slope ser
+    #  inches = (adc - offset) / slope
+    def _inches(self):
+        return (self._raw() - self.offset) / self.slope_inches
 
-# single dms sensor, directly connected (old wolfbots only)
-class Dms(object):
-  def __init__(self, dms_config):
-    self.adc = adc.adc(dms_config['ain'])
-    self.config = dms_config
-    self.angle = int(dms_config['angle'])
-
-  def raw(self):
-    return self.adc.read()
-
-  def dist(self):
-    slope = float(self.config['slope'])
-    offset = float(self.config['offset'])
-    return  self.raw() * slope + offset
-
-  def contact(self):
-    if self.adc.read() > self.config['contact']:
-      return True
-    return False
-
-  def status(self):
-    val = self.adc.read()
-    if val > self.config['contact']:
-      state = 'contact'
-    else:
-      state = 'normal'
-    return (val, state)

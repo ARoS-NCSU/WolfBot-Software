@@ -10,6 +10,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--num', type=int, default=1)
 parser.add_argument('-c', '--continuous', action='store_true', default=False)
+parser.add_argument('-i', '--inches', action='store_true', default=False)
 args = parser.parse_args()
 
 w = wb.wolfbot()
@@ -17,9 +18,12 @@ w = wb.wolfbot()
 try:
     count = 0
     while count < args.num or args.continuous:
-        dms = w.dms_mux.read_all()
+        if args.inches:
+            dms = w.dms_mux.read_all(mode='inch')
+        else:
+            dms = w.dms_mux.read_all()
         for name, val in sorted(dms.items()):
-            print "name: {:3}, val: {:4d}".format(name, val)
+            print "name: {:3}, val: {}".format(name, val)
         print
         time.sleep(0.1)
         count += 1

@@ -23,7 +23,7 @@ adcfile = '/root/adc_stream_'+w.hostname+timestring+'.txt'
 obs_write = open(obsfile, 'w')
 adc_write = open(adcfile, 'w')
 
-max_adc = 500
+min_dis = 6
 quick_sleep = 0.5
 sixft_time = 7.5 #estimates how long it takes bot to travel 6 ft
 run_time = args.runtime  #how long in seconds to run experiment
@@ -34,18 +34,18 @@ def cleanup(signum, frame):
     	os._exit(0)
 
 def check_dist():
-	max_sensor = 0
-	vals = w.dms_mux.read_all()
+	min_sensor = 0
+	vals = w.dms_mux.read_all(mode='inch')
         read_all_string = [str(vals[i]) for i in sorted(vals)]
         t = time.time()-t0
         adc_write.write('%.3f, '%t+', '.join(read_all_string)+'\n')
 	for i in range(6):
 		sensor = i*60
 		reading = vals[sensor]
-		if reading >= vals[max_sensor]:
-			max_sensor = sensor 
-	if vals[max_sensor] > max_adc:
-		return(max_sensor) #returns value only if obstacle in range
+		if reading >= vals[min_sensor]:
+			min_sensor = sensor 
+	if vals[min_sensor] > min_dis:
+		return(min_sensor) #returns value only if obstacle in range
 	else: 
 		return None
 

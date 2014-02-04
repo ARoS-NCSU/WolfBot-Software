@@ -16,7 +16,8 @@ import math
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--offset', type=int, default=0)
 parser.add_argument('-c', '--count', type=int, default=10)
-parser.add_argument('-z', '--zpos', type=float, default=1.0)
+parser.add_argument('-z', '--zpos', type=float, default=0.0)
+parser.add_argument('-x', '--xpos', type=float, default=None)
 parser.add_argument('-s', '--spread', type=float, default=2.5)
 parser.add_argument('-a', '--angle', type=float, default=0.0)
 args = parser.parse_args()
@@ -37,8 +38,12 @@ print "Spacing: ", spacing
 print
 print "x_i: ", x_i
 
-z = args.zpos
-x = -spread/2 + spacing*x_i
+if args.xpos is not None:
+	x = args.xpos
+	z = -spread/2 + spacing*x_i
+else:
+	z = args.zpos
+        x = -spread/2 + spacing*x_i
 
 print
 print "z: ", z, "x: ", x

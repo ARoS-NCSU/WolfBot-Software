@@ -48,7 +48,7 @@ def record_adcs(file,dists):
 
 def datafile(base):
     prefix = '/root/'
-    suffix = '_%s_%s.txt' % (wb.hostname, time.strftime("%Y-%m-%d-%H:%M"))
+    suffix = '_%s_%s_%s.txt' % (wb.hostname, args.name, time.strftime("%Y-%m-%d-%H:%M"))
     filename = prefix + base + suffix
     f = open(filename, 'w')
 
@@ -89,6 +89,8 @@ if __name__ == '__main__':
             help='Random range for bounce angle (degrees)')
     parser.add_argument('--verify', dest='verify_count', type=int, default = 1,
             help='Random range for bounce angle (degrees)')
+    parser.add_argument('--name', dest='name', default = "noname",
+            help='Identifier for log files names')
     parser.add_argument('-d', '--debug', dest='debug', action='store_true', default=False)
     args = parser.parse_args()
 

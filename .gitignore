@@ -20,3 +20,6 @@ DRILEGEND.CFG
 *.GTP
 
 *.pyc
+
+# PDFs generated from SVG source
+wiring/*.pdf

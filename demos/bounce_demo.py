@@ -37,8 +37,8 @@ while True:
         angle = name
         #print "name: ", name, "angle: ", angle, "val: ", val
 
-        if val > 800:
-            val = 800
+        if val > 2000:
+            val = 2000
         x = val * cos(radians(angle))
         y = val * sin(radians(angle))
         x_tot += x

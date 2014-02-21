@@ -1,21 +1,31 @@
-import bbb.adc as adc
-import bbb.gpio as gpio
+import bbb
+
+def load_adc_file(filename):
+    vals = []
+    with open(filename) as f:
+        for line in f.readlines():
+            vals.append(float(line.split(',')[1]))
+    return vals
 
 class DmsMux(object):
     def __init__(self, mux_config):
-        self.adc = adc.adc(mux_config['ain'])
+        self.adc = bbb.ADC(mux_config['ain'])
         self.gpios = []
 
         # select lines gpios
         #   config file is high bit to low bit, so reverse them
         for g in reversed(mux_config['select_gpios']):
-            self.gpios.append( gpio.gpio(g) )
+            self.gpios.append( bbb.GPIO(g) )
+
+        adc_vals = None
+        if 'adc_file' in mux_config:
+            adc_vals = load_adc_file(mux_config['adc_file'])
 
         self.sensors = {}
         for sensor_config in mux_config['sensors']:
             name = sensor_config['angle']
             # address reads in as an integer, even if config uses binary
-            self.sensors[name] = DmsMuxSensor(self, name, sensor_config)
+            self.sensors[name] = DmsMuxSensor(self, name, sensor_config, adc_vals)
 
         self.config = mux_config
 
@@ -30,7 +40,7 @@ class DmsMux(object):
     # address property??
 
     def read(self):
-        return self.adc.read()
+        return self.adc.raw()
         
     def read_all(self, mode='raw'):
         #result = {}
@@ -40,13 +50,14 @@ class DmsMux(object):
          
 # a single sensor from a multiplexed group
 class DmsMuxSensor(object):
-    def __init__(self, mux, name, config):
+    def __init__(self, mux, name, config, adc_vals=None):
         self.name = name
         self.mux = mux
         self.config = config
         self.address = config['address']
         self.slope_inches = float(config['slope_inches'])
         self.offset = float(config['offset'])
+        self.adc_vals = adc_vals
 
     def read(self, mode='raw'):
         self.mux.select(self.address)
@@ -56,10 +67,13 @@ class DmsMuxSensor(object):
             return self._raw()
 
     def _raw(self):
-        return self.mux.adc.read()
+        return self.mux.adc.raw()
 
-    # offset and slope ser
-    #  inches = (adc - offset) / slope
     def _inches(self):
-        return (self._raw() - self.offset) / self.slope_inches
+        if self.adc_vals is not None:
+            adc = min( len(self.adc_vals)-1, self.mux.adc.raw() )
+            return self.adc_vals[adc]
+        else:
+            #  inches = (adc - offset) / slope
+            return (self.mux.adc.mV - self.offset) / self.slope_inches
 

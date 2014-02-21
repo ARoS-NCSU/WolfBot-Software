@@ -20,12 +20,14 @@ try:
     while count < args.num or args.continuous:
         if args.inches:
             dms = w.dms_mux.read_all(mode='inch')
+            fmt_str = "name: {:3}, val: {:5.2f}"
         else:
             dms = w.dms_mux.read_all()
+            fmt_str = "name: {:3}, val: {:3}"
         for name, val in sorted(dms.items()):
-            print "name: {:3}, val: {}".format(name, val)
+            print fmt_str.format(name, val)
         print
-        time.sleep(0.1)
+        time.sleep(0.05)
         count += 1
 except KeyboardInterrupt:
     pass

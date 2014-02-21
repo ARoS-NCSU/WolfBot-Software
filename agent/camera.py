@@ -1,9 +1,9 @@
-import bbb.pwm as pwm
+import bbb
 
 class Camera(object):
 
     def __init__(self):
-        self.pwm = pwm.pwm(2)
+        self.pwm = bbb.PWM(2)
         self.pwm.stop()
         self.tilt = 135
 

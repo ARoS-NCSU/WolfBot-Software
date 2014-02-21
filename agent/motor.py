@@ -1,5 +1,4 @@
-import bbb.pwm as pwm
-import bbb.gpio as gpio
+import bbb
 
 # pwm, dir
 motor_cfg = { 1: (4, 31), 
@@ -10,8 +9,8 @@ class motor(object):
 
   def __init__(self, num):
     self.num = num
-    self.pwm = pwm.pwm(motor_cfg[num][0])
-    self.dir = gpio.gpio(motor_cfg[num][1])
+    self.pwm = bbb.PWM(motor_cfg[num][0])
+    self.dir = bbb.GPIO(motor_cfg[num][1])
     self.pwm.stop()
     self.speed = 0
 

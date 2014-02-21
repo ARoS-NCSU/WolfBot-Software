@@ -4,7 +4,7 @@ import logging
 import yaml
 from math import sin, radians
 import motor, lsm, dms, battery, lightsensor, camera
-import bbb.gpio as gpio
+import bbb
 from socket import gethostname
 
 class wolfbot(object):
@@ -20,14 +20,10 @@ class wolfbot(object):
         self.motors = {}
         for i in [1,2,3]:
             self.motors[i] = motor.motor(i)
-        self.motor_enable = gpio.gpio(117)
+        self.motor_enable = bbb.GPIO(117)
 
         self.accel = lsm.accel()
         self.mag = lsm.mag()
-
-        #self.dms = []
-        #for dms_cfg in self.config['dms']:
-        #  self.dms.append( dms.dms(dms_cfg) )
 
         self.dms_mux = dms.DmsMux(self.config['dms_mux'])
         self.dms = self.dms_mux.sensors

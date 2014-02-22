@@ -71,6 +71,7 @@ class Optitrack(object):
                     if x == y == z == yaw == pitch == roll == 0.00:
                         #print "BAD pose data!"
                         # should we return with an exception/flag or keep trying??
+                        # NOTE: tt_streamer now filters these results on its end
                         pass
                     else:
                         return {'x':x, 'y':y, 'z':z, 

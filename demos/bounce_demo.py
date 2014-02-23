@@ -2,55 +2,50 @@
 
 import sys
 sys.path.append('/wolfbot/agent')
-import wolfbot as wb
-from math import degrees, radians, sin, cos, atan2
+import wolfbot
+from math import degrees, radians, sin, cos, atan2, sqrt
 import time
+import signal
+import os
 
-w = wb.wolfbot()
+def cleanup(signum, frame):
+    wb.stop()
+    os._exit(0)
 
-def shy(angle, mag):
-    away = (angle + 180) % 360
-    if mag < 50:
-        w.stop()
-    else:
-        if mag > 100:
-            mag = 100
-        w.move(away, mag)
+signal.signal(signal.SIGINT, cleanup)
+signal.signal(signal.SIGTERM, cleanup)
 
-def bounce(angle, mag):
-    if not hasattr(bounce, "speed"):
-        bounce.speed = 0  # it doesn't exist yet, so initialize it
-    speed = bounce.speed
-    if mag > 50:
-        speed = mag
-    else:
-        #away_speed -= 0.1
-        pass
-    w.move(away, speed)
+wb = wolfbot.wolfbot()
 
-away_speed = 0
+vel_x = 0
+vel_y = 0
 while True:
-    dms = w.dms_mux.read_all()
+    dms = wb.dms_mux.read_all()
     x_tot = 0.0
     y_tot = 0.0
     for name, val in sorted(dms.items()):
         angle = name
         #print "name: ", name, "angle: ", angle, "val: ", val
-
-        if val > 2000:
-            val = 2000
+        if val < 200:
+            continue
+        if val > 1700:
+            val = 1700
         x = val * cos(radians(angle))
         y = val * sin(radians(angle))
         x_tot += x
         y_tot += y
 
-    mag = 100 * (abs(x_tot) + abs(y_tot))/1000  # normalize to ??
-    angle = degrees(atan2(y_tot, x_tot)) % 360
-    #print "x_tot, y_tot:", x_tot, y_tot
-    #print "mag, angle (sensed): ", mag, angle
-    #print "angle (away): ", away
-   
-    shy(angle, mag)
+    decay = 0.7
+    vel_x = (decay * vel_x) - x_tot
+    vel_y = (decay * vel_y) - y_tot
+    vel_mag = 100 * sqrt((vel_x)**2 + vel_y**2)/3400  # normalize to ??
+    vel_mag = min(100, vel_mag)
+    vel_ang = degrees(atan2(vel_y, vel_x)) % 360
+
+    if vel_mag > 50:
+        wb.move(vel_ang, vel_mag)
+    else:
+        wb.stop()
 
     time.sleep(0.01)
 

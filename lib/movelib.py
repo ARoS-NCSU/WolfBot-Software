@@ -53,6 +53,8 @@ def sensor_vector(sensors, minval = 4.0, invert=True):
     x_tot = 0.0
     y_tot = 0.0
     for angle, val in sensors.items():
+        # cutoff due to minimum useful sensor distance
+        # TODO: add minval as a property of the dms sensor class
         if val < minval:
             val = minval
         if invert:
@@ -62,8 +64,21 @@ def sensor_vector(sensors, minval = 4.0, invert=True):
         x_tot += x
         y_tot += y
 
-    mag = 100 * (abs(x_tot) + abs(y_tot))
+    scale = 100 / (2*1.0/minval)
+    mag = scale * sqrt(x_tot**2 + y_tot**2)
     angle = degrees(atan2(y_tot, x_tot)) % 360
+
+    return angle, mag
+
+def add_vectors( vec1, vec2 ):
+    """ vecs are ang, mag """
+    x1 = vec1[1] * cos(radians(vec1[0]))
+    y1 = vec1[1] * sin(radians(vec1[0]))
+    x2 = vec2[1] * cos(radians(vec2[0]))
+    y2 = vec2[1] * sin(radians(vec2[0]))
+    mag = sqrt((x1+x2)**2 + (y1+y2)**2)
+    angle = degrees(atan2(y1+y2, x1+x2)) % 360
+    return angle, mag
 
 
 # globals for goto =(
@@ -92,7 +107,6 @@ def goto(wb, to_z, to_x, to_theta, localizer):
         _to_x = to_x
         _to_theta = to_theta
 
-
     pose = localizer()
     log.info("Pose: %0.3f, x: %0.3f @ %0.1f" % (pose['z'],pose['x'],pose['yaw']))
 
@@ -109,52 +123,42 @@ def goto(wb, to_z, to_x, to_theta, localizer):
     #if abs(tot_err_theta * kr_i) < 100:   # clamp to useful maximum
     if abs(err_theta) < 25:  # only accum when close
         tot_err_theta += err_theta
-    #log.debug("Integrators: z: %0.2f, x: %0.2f, theta: %0.2f" % (tot_err_z,tot_err_x,tot_err_theta))
     log.debug("Integrators: dist: %0.2f, theta: %0.2f" % (tot_err_dist,tot_err_theta))
 
-
-    # choose direction closest to goal that is not an obstacle
     ang_to_goal = degrees(atan2(err_x,err_z))
-
     rel_to_goal = ang_to_goal - pose['yaw']
     log.info("Relative angle to goal: %0.2f" % rel_to_goal)
-   
 
-    #move_speed = min(100,max(55,move_speed))
-    #move_speed = k_p * min(dist_to_goal, 0.25)
     move_speed = k_p * dist_to_goal + k_i*tot_err_dist
     move_speed = min(100,move_speed)
 
     rotation = kr_p * err_theta + kr_i*tot_err_theta
     rotation = max(-100,min(100,rotation))
 
-    min_avoid = 10  # in inches
-    all_sensors = wb.dms_mux.read_all(mode='inch')
-    front_val = interpolate_sensor(rel_to_goal, all_sensors)
-    if front_val > min_avoid:
-        wb.move_rotate(rel_to_goal,rotation,move_speed=move_speed)
-    else:
-        log.debug("Forward obstacle detected(%0.2f)" % front_val)
+    log.info("Goal-only params: %0.1f @ %0.1f deg, %0.1f rotation" %
+            (move_speed, rel_to_goal, rotation))
+
+    all_sensors = wb.dms_mux.read_all(mode='inch') # use inch since calibrated
+    log.debug("Sensors: %s", [ "%d: %0.2f"%(k,all_sensors[k]) for k in sorted(all_sensors.keys()) ] )
+    obs_ang, obs_mag = sensor_vector(all_sensors)
+    log.debug("Sensor vector is: %0.2f @ %0.1f deg", obs_mag, obs_ang)
+
+    # neg obs_mag to move away
+    combo_ang, combo_mag = add_vectors( (rel_to_goal, move_speed), (obs_ang, -3*obs_mag) )
+    log.debug("Combined vector is: %0.2f @ %0.1f deg", combo_mag, combo_ang)
+    combo_mag = min(100,combo_mag)
+
+
+    if False:
         left90 = rel_to_goal + 90
         right90 = rel_to_goal - 90
         left_val = interpolate_sensor(left90,all_sensors)
         right_val = interpolate_sensor(right90,all_sensors)
-        log.debug("Avoid options - Left: %0.1f @ %0.2f, Right: %0.1f @ %0.2f", 
-               left_val, left90, right_val, right90)
-        # vals are inches to obstacle, higher is better option
-        #if left_val > right_val:
-        #    avoid_angle = left90
-        #else:
-        #    avoid_angle = right90
-        #wb.move(avoid_angle,move_speed)
-        if right_val > min_avoid:
-            wb.move(right90,move_speed)
-        else:
-            wb.stop()
 
-        
-    # determine if there is an immediate obstacle in our path to goal
-    #  if so , pick a perpendicular direction toward lesser sensor
+    # end here and combine with avoidance in a parent function?
+    #wb.move_rotate(rel_to_goal,rotation,move_speed=move_speed)
+
+    wb.move_rotate(combo_ang,rotation,move_speed=combo_mag)
 
     return err_z, err_x, err_theta
 
@@ -167,7 +171,7 @@ def goto_and_stop(wb, z, x, theta, get_pose, precision = 0.03):
         #e_z, e_x, e_theta = goto( wb, args.z, args.x, args.theta, fakepose)
         e_z, e_x, e_theta = goto( wb, z, x, theta, get_pose)
         e_trans = sqrt(e_z**2 + e_x**2)
-        log.debug("Error to goal - Translation: %0.3f (%0.3f, %0.3f), Rotation: %0.2f" % 
+        log.debug("Error to goal - Translation: %0.3f (%0.3f, %0.3f), Rotation: %0.2f" %
                 (e_trans, e_z, e_x, e_theta))
     wb.stop()
 

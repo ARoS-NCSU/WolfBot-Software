@@ -13,7 +13,7 @@ sys.path.append('/wolfbot/agent')
 sys.path.append('/wolfbot/lib')
 import wolfbot as wb
 import optitrack
-import simple_move
+from movelib import goto_and_stop
 
 import math
 
@@ -44,5 +44,5 @@ def cleanup(signum, frame):
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-simple_move.goto(w,args.z, args.x, args.theta, opti.get_pose)
+goto_and_stop(w,args.z, args.x, args.theta, opti.get_pose)
 

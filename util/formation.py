@@ -8,7 +8,7 @@ sys.path.append('/wolfbot/agent')
 sys.path.append('/wolfbot/lib')
 import wolfbot
 import optitrack
-import simple_move  # TODO: update this for avoidance
+from movelib import goto_and_stop
 
 parser = argparse.ArgumentParser()
 parser.add_argument('name')
@@ -61,6 +61,6 @@ except TypeError:
 
 opti = optitrack.Optitrack()
 try:
-    simple_move.goto(wb, x, y, theta, opti.get_pose)
+    goto_and_stop(wb, x, y, theta, opti.get_pose)
 except KeyboardInterrupt:
     wb.stop()

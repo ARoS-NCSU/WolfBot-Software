@@ -19,7 +19,7 @@ from math import atan2,pi,degrees,radians, sin,cos,sqrt
 
 
 def interpolate_sensor(angle, sensors):
-    #log.debug("Interpolating angle %0.2f", angle)
+    log = logging.getLogger(__name__)
 
     angle = normalize(angle) % 360
     sens_angles = sensors.keys()
@@ -158,6 +158,18 @@ def goto(wb, to_z, to_x, to_theta, localizer):
 
     return err_z, err_x, err_theta
 
+def goto_and_stop(wb, z, x, theta, get_pose, precision = 0.03):
+    log = logging.getLogger(__name__)
+    e_trans = 999
+    e_theta = 999
+    while (e_trans > precision) or (abs(e_theta) > precision*50):
+        log.debug("========================")
+        #e_z, e_x, e_theta = goto( wb, args.z, args.x, args.theta, fakepose)
+        e_z, e_x, e_theta = goto( wb, z, x, theta, get_pose)
+        e_trans = sqrt(e_z**2 + e_x**2)
+        log.debug("Error to goal - Translation: %0.3f (%0.3f, %0.3f), Rotation: %0.2f" % 
+                (e_trans, e_z, e_x, e_theta))
+    wb.stop()
 
 def fakepose():
     return {'z':1.01, 'x':0.01, 'yaw':0.0}
@@ -196,14 +208,7 @@ if __name__ == '__main__':
     #wb.log.setLevel(logging.DEBUG)
     opti = optitrack.Optitrack()
 
-    e_trans = 99
-    e_theta = 99
-    while (e_trans > args.precision) or (abs(e_theta) > args.precision*50):
-        log.debug("========================")
-        #e_z, e_x, e_theta = goto( wb, args.z, args.x, args.theta, fakepose)
-        e_z, e_x, e_theta = goto( wb, args.z, args.x, args.theta, opti.get_pose)
-        e_trans = sqrt(e_z**2 + e_x**2)
-        log.debug("Error to goal - Translation: %0.3f (%0.3f, %0.3f), Rotation: %0.2f" % 
-                (e_trans, e_z, e_x, e_theta))
+    goto_and_stop(wb,args.z,args.x,args.theta,opti.get_pose)
 
-    wb.stop()
+    log.info('Done!')
+

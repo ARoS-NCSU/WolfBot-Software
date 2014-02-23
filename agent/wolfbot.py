@@ -40,11 +40,11 @@ class wolfbot(object):
         if(self.config['logfile']):
             fh = logging.FileHandler(self.config['logfile'])
             fh.setFormatter(formatter)
-            logger.addHandler(fh) 
+            logger.addHandler(fh)
         else:
             ch = logging.StreamHandler()
             ch.setFormatter(formatter)
-            logger.addHandler(ch) 
+            logger.addHandler(ch)
         logger.setLevel(logging.DEBUG)
         self.log = logger
 
@@ -91,18 +91,57 @@ class wolfbot(object):
                 self.motors[m].reverse()
                 v = -v
             self.motors[m].set_speed(v)
-        self.log.debug("%s" % self.motors[m])
+            self.log.debug("%s" % self.motors[m])
 
         self.motor_enable.set_value(1)
 
     def turn(self, dir, speed = 100):
+        self.log.warn("Wolfbot.turn() is deprecated, use Wolfbot.rotate()!")
         if dir == 'cw':
+            speed = -speed
+        self.rotate(speed)
+
+    def rotate(self, speed):
+        """ Rotation is CCW for positive speed (i.e., in the +theta direction) """
+        if speed < 0:
+            speed = abs(speed)
             for i in [1,2,3]:
-                self.motors[i].reverse()
+                self.motors[i].reverse()  # CW
                 self.motors[i].set_speed(speed)
-        if dir == 'ccw':
+        else:
             for i in [1,2,3]:
-                self.motors[i].forward()
+                self.motors[i].forward()  # CCW
                 self.motors[i].set_speed(speed)
         self.motor_enable.set_value(1)
 
+    def move_rotate(self, heading, rotation, move_speed = 50):
+
+        self.log.info("Moving %0.2f degrees @ speed %0.2f, while turning @ %0.2f" %
+                (heading, move_speed, rotation))
+        vel = {}
+
+        # can't have full turn and full translate simulaneously
+        total_speed = move_speed + abs(rotation)
+        if total_speed > 100:
+            move_speed = 100 * move_speed / total_speed
+            rotation = 100 * rotation / total_speed
+        self.log.debug("Norm'd speeds - Move: %0.2f, Rotate: %0.2f: ", move_speed, rotation)
+
+        # 0 is straight, Motor 1 is 60, 2 is 180, 3 is 300/-60
+        vel[1] = move_speed * sin(radians(240-heading)) + rotation
+        vel[2] = move_speed * sin(radians(0-heading)) + rotation
+        vel[3] = move_speed * sin(radians(120-heading)) + rotation
+
+        #self.log.debug("Vels %s", vel)
+
+        for m,v in vel.items():
+            if v > 0:
+                self.motors[m].forward()
+            else:
+                # TODO: Allow set_speed to take negative values(?)
+                self.motors[m].reverse()
+                v = -v
+            self.log.debug("Setting motor #%d to %0.2f" % (m,v))
+            self.motors[m].set_speed(v)
+
+        self.motor_enable.set_value(1)

@@ -1,11 +1,12 @@
 #!/usr/bin/python
 from math import sin, cos, pi
 
-def pose(s, params = [1,1]):
+def pose(s, params = [1,1,0.5]):
     r = params[0]
     f = params[1]
-    x = r*(s-.3)*cos(2*pi*f*(s-.3))
-    y = r*(s-.3)*sin(2*pi*f*(s-.3))
+    shift = params[2]	
+    x = r*(s+shift)*cos(2*pi*f*(s+shift))
+    y = r*(s+shift)*sin(2*pi*f*(s+shift))
     angle = 0
     return x,y,angle
 

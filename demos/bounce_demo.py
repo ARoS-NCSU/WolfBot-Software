@@ -43,7 +43,7 @@ while True:
         y = val * sin(radians(angle))
         x_tot += x
         y_tot += y
-    
+
     decay = max(0, 1-args.decay_rate)
     mass = max(0.01, args.mass)
     vel_x = (decay * vel_x) - x_tot/mass

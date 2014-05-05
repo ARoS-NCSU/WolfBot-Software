@@ -1,1 +1,0 @@
-This is the old manual wolfbot install system, and will be deleted soon.  Use salt instead.
